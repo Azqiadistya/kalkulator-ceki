@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cekinya Indonesia</title>
+    <style>
+        :root {
+            --bg: #0f3b2a;
+            --card: #fbf7ef;
+            --ink: #1f1f1f;
+            --accent: #1c6b4a;
+            --accent-2: #b7332a;
+            --muted: #5f5f5f;
+        }
+        body {
+            font-family: "Georgia", "Times New Roman", serif;
+            background:
+                linear-gradient(rgba(251, 247, 239, 0.78), rgba(251, 247, 239, 0.78)),
+                url("assets/card-bg.jpg") center / cover no-repeat fixed;
+            color: var(--ink);
+            margin: 0;
+            min-height: 100vh;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wrap {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        .card {
+            background: var(--card);
+            border: 2px solid #e2d7c7;
+            box-shadow: 10px 10px 0 rgba(7, 19, 13, 0.55);
+            padding: 20px;
+            position: relative;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 48px;
+            height: 64px;
+            border: 1px solid #d7cabb;
+            background:
+                linear-gradient(135deg, #ffffff 0 55%, #f1e8db 55% 100%);
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.08);
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='64' viewBox='0 0 48 64'><rect x='0' y='0' width='48' height='64' fill='none'/><path d='M9 16 C9 12 13 10 16 13 C19 10 23 12 23 16 C23 21 16 25 16 25 C16 25 9 21 9 16 Z' fill='%23b7332a'/><path d='M28 44 C28 40 32 38 35 41 C38 38 42 40 42 44 C42 49 35 53 35 53 C35 53 28 49 28 44 Z' fill='%230f3b2a'/></svg>");
+            background-repeat: no-repeat;
+            background-position: center 8px;
+        }
+        h1 {
+            margin: 0 0 16px;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+        h2 {
+            margin: 0 0 12px;
+        }
+        p {
+            margin: 0 0 16px;
+            color: var(--muted);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        label {
+            font-size: 14px;
+            color: var(--muted);
+        }
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 16px;
+            border: 1px solid #d6c4aa;
+            background: #fff;
+            color: var(--ink);
+        }
+        button {
+            padding: 10px 16px;
+            font-size: 18px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .primary {
+            background: var(--accent);
+        }
+        .danger {
+            background: var(--accent-2);
+        }
+        .error {
+            background: #fff3ef;
+            border: 1px solid #f0b7a7;
+            color: #9a2a0d;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .table-scroll {
+            max-height: 264px;
+            overflow-y: auto;
+            border: 1px solid #e0d0b8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        th, td {
+            border: 1px solid #e0d0b8;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #f5e9d5;
+        }
+        .name-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+        }
+        .name-btn:hover {
+            text-decoration: underline;
+        }
+        .calc {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .calc-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+        .calc-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .scores {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .score-item {
+            background: #fff6e6;
+            border: 1px solid #ead7bf;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+        .save-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+        @media (max-width: 900px) {
+            .wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+                max-width: 320px;
+                margin: 0 auto;
+            }
+            .actions {
+                justify-content: stretch;
+                max-width: 320px;
+                margin: 0 auto;
+            }
+            .actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card view" id="setup-view">
+        <h1>Setup User</h1>
+        <p>Masukkan 4 nama peserta terlebih dahulu.</p>
+        <div class="error" id="error"></div>
+        <form id="setup-form">
+            <div class="grid">
+                <div>
+                    <label for="name1">Nama 1</label>
+                    <input id="name1" name="name1" type="text" required>
+                </div>
+                <div>
+                    <label for="name2">Nama 2</label>
+                    <input id="name2" name="name2" type="text" required>
+                </div>
+                <div>
+                    <label for="name3">Nama 3</label>
+                    <input id="name3" name="name3" type="text" required>
+                </div>
+                <div>
+                    <label for="name4">Nama 4</label>
+                    <input id="name4" name="name4" type="text" required>
+                </div>
+            </div>
+            <div class="actions">
+                <button type="submit" class="danger">Simpan &amp; Masuk</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="wrap view" id="main-view">
+        <section class="card">
+            <h2>Kalkulator</h2>
+            <div class="calc" id="calc-list"></div>
+            <div class="scores" id="score-list"></div>
+            <div class="save-row">
+                <div class="calc-actions">
+                    <button type="button" class="primary" id="save-btn">Simpan</button>
+                    <button type="button" class="danger" id="reset-calc-btn">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Cekinya Indonesia</h2>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr id="history-head"></tr>
+                    </thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+            <div class="table-actions">
+                <button type="button" class="primary" id="restart-btn">Mulai Ulang Permainan</button>
+                <button type="button" class="danger" id="reset-table-btn">Reset Tabel</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        (function () {
+            var storage = {
+                names: "cek_names",
+                inputs: "cek_inputs",
+                history: "cek_history"
+            };
+            var setupView = document.getElementById("setup-view");
+            var mainView = document.getElementById("main-view");
+            var error = document.getElementById("error");
+
+            function load(key, fallback) {
+                try {
+                    var raw = localStorage.getItem(key);
+                    return raw ? JSON.parse(raw) : fallback;
+                } catch (err) {
+                    return fallback;
+                }
+            }
+
+            function save(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            }
+
+            function showSetup() {
+                setupView.classList.add("active");
+                mainView.classList.remove("active");
+            }
+
+            function showMain() {
+                mainView.classList.add("active");
+                setupView.classList.remove("active");
+            }
+
+            var names = load(storage.names, null);
+            var inputs = load(storage.inputs, [0, 0, 0, 0]);
+            var history = load(storage.history, []);
+
+            function normalizeInputs() {
+                if (!Array.isArray(inputs) || inputs.length !== 4) {
+                    inputs = [0, 0, 0, 0];
+                }
+            }
+
+            function normalizeHistory() {
+                if (!Array.isArray(history)) {
+                    history = [];
+                }
+            }
+
+            function ensureNames() {
+                if (!Array.isArray(names) || names.length !== 4) {
+                    showSetup();
+                    return false;
+                }
+                showMain();
+                return true;
+            }
+
+            function renderTable() {
+                var head = document.getElementById("history-head");
+                head.innerHTML = "";
+                names.forEach(function (name, index) {
+                    var th = document.createElement("th");
+                    var button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "name-btn";
+                    button.textContent = name;
+                    button.setAttribute("data-index", index);
+                    th.appendChild(button);
+                    head.appendChild(th);
+                });
+
+                var body = document.getElementById("history-body");
+                body.innerHTML = "";
+                if (!history.length) {
+                    var empty = document.createElement("tr");
+                    var cell = document.createElement("td");
+                    cell.colSpan = 4;
+                    cell.className = "muted";
+                    cell.textContent = "Belum ada data.";
+                    empty.appendChild(cell);
+                    body.appendChild(empty);
+                    return;
+                }
+
+                history.slice().reverse().forEach(function (row) {
+                    var tr = document.createElement("tr");
+                    row.forEach(function (value) {
+                        var td = document.createElement("td");
+                        td.textContent = parseInt(value, 10);
+                        tr.appendChild(td);
+                    });
+                    body.appendChild(tr);
+                });
+            }
+
+            function renderCalc() {
+                var list = document.getElementById("calc-list");
+                list.innerHTML = "";
+                names.forEach(function (name, index) {
+                    var row = document.createElement("div");
+                    row.className = "calc-row";
+                    row.innerHTML =
+                        '<label>' +
+                        name +
+                        '<input type="number" min="0" step="1" data-input="' +
+                        index +
+                        '">' +
+                        '</label>' +
+                        '<div class="calc-actions">' +
+                        '<button type="button" class="primary" data-op="plus" data-index="' +
+                        index +
+                        '">+</button>' +
+                        '<button type="button" class="danger" data-op="minus" data-index="' +
+                        index +
+                        '">-</button>' +
+                        "</div>";
+                    list.appendChild(row);
+                });
+            }
+
+            function renderScores() {
+                var scoreList = document.getElementById("score-list");
+                scoreList.innerHTML = "";
+                names.forEach(function (name, index) {
+                    var item = document.createElement("div");
+                    item.className = "score-item";
+                    item.innerHTML = name + ": <strong>" + parseInt(inputs[index], 10) + "</strong>";
+                    scoreList.appendChild(item);
+                });
+            }
+
+            function clearInputFields() {
+                document.querySelectorAll("[data-input]").forEach(function (input) {
+                    input.value = "";
+                });
+            }
+
+            function renderAll() {
+                if (!ensureNames()) {
+                    return;
+                }
+                renderCalc();
+                renderScores();
+                renderTable();
+            }
+
+            document.getElementById("setup-form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                var newNames = [];
+                for (var i = 1; i <= 4; i++) {
+                    var value = document.getElementById("name" + i).value.trim();
+                    if (!value) {
+                        error.textContent = "Nama ke-" + i + " wajib diisi.";
+                        error.style.display = "block";
+                        return;
+                    }
+                    newNames.push(value);
+                }
+                names = newNames;
+                inputs = [0, 0, 0, 0];
+                history = [];
+                save(storage.names, names);
+                save(storage.inputs, inputs);
+                save(storage.history, history);
+                error.style.display = "none";
+                showMain();
+                renderAll();
+            });
+
+            document.addEventListener("click", function (event) {
+                var target = event.target;
+
+                if (target.classList.contains("name-btn")) {
+                    var currentName = target.textContent.trim();
+                    var newName = window.prompt("Edit nama:", currentName);
+                    if (newName === null) {
+                        return;
+                    }
+                    newName = newName.trim();
+                    if (!newName) {
+                        return;
+                    }
+                    if (!window.confirm("Simpan perubahan nama?")) {
+                        return;
+                    }
+                    var nameIndex = parseInt(target.getAttribute("data-index"), 10);
+                    names[nameIndex] = newName;
+                    save(storage.names, names);
+                    renderAll();
+                    return;
+                }
+
+                if (target.dataset && target.dataset.op) {
+                    var index = parseInt(target.getAttribute("data-index"), 10);
+                    var input = document.querySelector('[data-input="' + index + '"]');
+                    var raw = input.value.trim();
+                    if (raw === "") {
+                        return;
+                    }
+                    var value = parseInt(raw, 10);
+                    if (isNaN(value) || value < 0) {
+                        return;
+                    }
+                    inputs[index] = target.dataset.op === "plus" ? value : -value;
+                    save(storage.inputs, inputs);
+                    renderScores();
+                    input.value = "";
+                    return;
+                }
+
+                if (target.id === "save-btn") {
+                    var base = history.length ? history[history.length - 1] : [0, 0, 0, 0];
+                    var newRow = [];
+                    for (var i = 0; i < 4; i++) {
+                        newRow.push(parseInt(base[i], 10) + parseInt(inputs[i], 10));
+                    }
+                    history.push(newRow);
+                    inputs = [0, 0, 0, 0];
+                    save(storage.history, history);
+                    save(storage.inputs, inputs);
+                    renderScores();
+                    renderTable();
+                    clearInputFields();
+                    return;
+                }
+
+                if (target.id === "reset-calc-btn") {
+                    inputs = [0, 0, 0, 0];
+                    save(storage.inputs, inputs);
+                    renderScores();
+                    clearInputFields();
+                    return;
+                }
+
+                if (target.id === "reset-table-btn") {
+                    history = [];
+                    save(storage.history, history);
+                    renderTable();
+                    return;
+                }
+
+                if (target.id === "restart-btn") {
+                    localStorage.removeItem(storage.names);
+                    localStorage.removeItem(storage.inputs);
+                    localStorage.removeItem(storage.history);
+                    showSetup();
+                }
+            });
+
+            normalizeInputs();
+            normalizeHistory();
+            renderAll();
+        })();
+    </script>
+</body>
+</html>
