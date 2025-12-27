@@ -211,7 +211,7 @@
 </head>
 <body>
     <div class="card view" id="setup-view">
-        <h1>Setup User</h1>
+        <h1>Nama Pemain</h1>
         <p>Masukkan 4 nama peserta terlebih dahulu.</p>
         <div class="error" id="error"></div>
         <form id="setup-form">
@@ -328,6 +328,31 @@
                 return true;
             }
 
+            function applyOvertakeRule(row, prevRow) {
+                if (!prevRow) {
+                    return row.slice();
+                }
+                var result = row.slice();
+                for (var i = 0; i < row.length; i++) {
+                    for (var j = 0; j < row.length; j++) {
+                        if (i === j) {
+                            continue;
+                        }
+                        if (row[j] > row[i] && prevRow[j] <= prevRow[i]) {
+                            if (row[i] < 0) {
+                                continue;
+                            }
+                            if (row[j] < 0) {
+                                continue;
+                            }
+                            result[i] = 0;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+
             function renderTable() {
                 var head = document.getElementById("history-head");
                 head.innerHTML = "";
@@ -355,7 +380,12 @@
                     return;
                 }
 
-                history.slice().reverse().forEach(function (row) {
+                var displayRows = [];
+                history.forEach(function (row, index) {
+                    var prevRow = index > 0 ? history[index - 1] : null;
+                    displayRows.push(applyOvertakeRule(row, prevRow));
+                });
+                displayRows.slice().reverse().forEach(function (row) {
                     var tr = document.createElement("tr");
                     row.forEach(function (value) {
                         var td = document.createElement("td");
